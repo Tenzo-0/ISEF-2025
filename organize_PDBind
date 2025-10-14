@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+import shutil
+from pathlib import Path
+
+# === CONFIGURATION ===
+src_root = Path("/path/to/source")  # e.g. /Users/bao/Downloads/test/TROCHOI
+dst_root = Path("/path/to/destination")  # e.g. /Users/bao/Downloads/test/RESULT
+dst_root.mkdir(parents=True, exist_ok=True)
+
+for pdb_file in src_root.rglob("*_protein.pdb"):
+    rel_path = pdb_file.relative_to(src_root)
+    dest_path = dst_root / rel_path
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(pdb_file), str(dest_path))
+    print(f"Moved: {pdb_file} -> {dest_path}")
+
+for sdf_file in src_root.rglob("*_ligand.sdf"):
+    rel_path = sdf_file.relative_to(src_root)
+    dest_path = dst_root / rel_path
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(sdf_file), str(dest_path))
+    print(f"Moved: {sdf_file} -> {dest_path}")
+
+print("✅ Done — only _protein.pdb and _ligand.sdf moved.")
